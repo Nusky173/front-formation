@@ -1,0 +1,170 @@
+<div class="container">
+    <mat-card class="card">
+        <mat-card-header class="header">
+            <div class="title">
+                <mat-card-title *ngIf="selectedUser">{{selectedUser.emailAddress}}</mat-card-title>
+            </div>
+            <mat-form-field>
+                <mat-label>Select a User</mat-label>
+                <mat-select [(value)]="selectedUser">
+                        <mat-option>None</mat-option>
+                    @for (user of users; track user) {
+                        <mat-option [value]="user" (click)="getUserMessage()">{{user.emailAddress}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </mat-card-header>
+
+        <mat-card-content class="content">
+            <!-- All Messages -->
+            <div class="messages" *ngIf="!selectedUser">
+                <div *ngFor="let message of messages" class="message">  
+                    <div class="message-block">
+                        <div class="owner">
+                            {{message.owner.emailAddress}}
+                        </div>
+                        <div class="message-container">
+                            <div class="text">
+                                {{message.text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-messages" *ngIf="selectedUser && !isCreatingMessage && !isEditingMessage">
+                <div 
+                    *ngFor="let message of userMessages" 
+                    class="message" 
+                    
+                    (click)="_selectMessage(message)"> 
+                    <div> 
+                        <div 
+                            class="message-container" 
+                            [ngClass]="selectedMessage == message ? 'selected' : ''">
+                            <div class="text">
+                                {{message.text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="isCreatingMessage" class="form-container">
+                <form [formGroup]="newMessageForm" (ngSubmit)="_submit()" class="form">
+
+                    <mat-form-field class="field-message">
+                        <mat-label>Message</mat-label>
+                        <textarea 
+                            matInput 
+                            placeholder="Message"
+                            [formControlName]="'value'"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field class="field-tag">
+                        <mat-label>Selected Tags</mat-label>
+                        <mat-chip-grid #chipGrid >
+                          @for (tag of selectedTags; track tag) {
+                            <mat-chip-row (removed)="removeTag(tag)" class="tag">
+                              {{tag.value}}
+                              <button matChipRemove>
+                                <mat-icon color="white">cancel</mat-icon>
+                              </button>
+                            </mat-chip-row>
+                          }
+                        </mat-chip-grid>
+                        <input placeholder="New tag..." #tagInput [formControlName]="'tags'"
+                          [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="addTag($event)"/>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                          @for (tag of tags; track tag) {
+                            <mat-option [value]="tag">{{tag.value}}</mat-option>
+                          }
+                        </mat-autocomplete>
+                      </mat-form-field>
+
+                    <div class="space-message-form"></div>
+
+                    <button 
+                        type="submit"
+                        mat-stroked-button 
+                        [disabled]="!newMessageForm.valid">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+
+            <div *ngIf="isEditingMessage" class="form-container">
+                <form [formGroup]="editMessageForm" (ngSubmit)="_submitEditMessage()" class="form">
+
+                    <mat-form-field class="field-message">
+                        <mat-label>Message</mat-label>
+                        <textarea 
+                            matInput 
+                            placeholder="Message"
+                            [formControlName]="'value'"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field class="field-tag">
+                        <mat-label>Selected Tags</mat-label>
+                        <mat-chip-grid #chipGrid >
+                          @for (tag of selectedTags; track tag) {
+                            <mat-chip-row (removed)="removeTag(tag)" class="tag">
+                              {{tag.value}}
+                              <button matChipRemove>
+                                <mat-icon color="white">cancel</mat-icon>
+                              </button>
+                            </mat-chip-row>
+                          }
+                        </mat-chip-grid>
+                        <input placeholder="New tag..." #tagInput [formControlName]="'tags'"
+                          [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          (matChipInputTokenEnd)="addTag($event)"/>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                          @for (tag of tags; track tag) {
+                            <mat-option [value]="tag">{{tag.value}}</mat-option>
+                          }
+                        </mat-autocomplete>
+                      </mat-form-field>
+
+                    <div class="space-message-form"></div>
+
+                    <button 
+                        type="submit"
+                        mat-stroked-button 
+                        [disabled]="!editMessageForm.valid">
+                        Ajouter
+                    </button>
+                </form>
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer" *ngIf="selectedUser && !isCreatingMessage && !isEditingMessage">
+            <div class="button-container"> 
+                <button 
+                    mat-flat-button 
+                    color="primary" 
+                    (click)="isCreatingMessage = !isCreatingMessage">
+                    New Message
+                </button>
+                <div class="disabled-button">
+                    <button 
+                        mat-stroked-button 
+                        [disabled]="!selectedMessage"
+                        (click)="_editMessage()">
+                        Edit
+                    </button>
+                    <button 
+                        mat-stroked-button 
+                        [disabled]="!selectedMessage" 
+                        color="warn"
+                        (click)="_deleteMessage()">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+
+</div>

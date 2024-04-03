@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,21 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'front-formation';
+
+  constructor(private router: Router) {}
+
+
+  _goToUser() {
+    this.router.navigateByUrl("/user")
+  }
+
+  _goToMessage() {
+    this.router.navigateByUrl("/message")
+  }
+
+  _goToTag() {
+    this.router.navigateByUrl("/tag")
+  }
 }
+
+

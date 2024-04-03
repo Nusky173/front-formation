@@ -1,0 +1,63 @@
+.container {
+    margin: 5% auto;
+    width: 50%;
+}
+
+.content {
+    height: 100%;
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    margin: 20px;
+}
+
+.header {
+    width: 100%;
+    text-align: center;
+}
+
+.card {
+    height: 350px;
+}
+
+.add-user-btn {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    display: flex;
+    gap: 4px;
+    flex-direction: row;
+}
+
+.name-field {
+    flex: 1 0 50%;
+}
+
+.form-button {
+    display: flex;
+    gap: 4px;
+    flex-direction: row;
+}
+
+.form-button-fake {
+    flex: 1 0;
+}
+
+.users {
+    width: 100%;
+}
+
+.user-field {
+    width: 100%;
+}

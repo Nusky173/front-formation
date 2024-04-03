@@ -1,0 +1,108 @@
+<div class="container">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>My Tags</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="content" >
+            <mat-chip-listbox class="tag-list" *ngIf="!isAddingNewTag && !isEditingTag">
+                @for (tag of tags; track tag) {
+                    <mat-chip-option (click)="_selectTag(tag)">{{tag.value}} </mat-chip-option>   
+                }
+            </mat-chip-listbox>
+            <div class="new-tag-form" *ngIf="isAddingNewTag">
+                <form 
+                    [formGroup]="newTagForm" 
+                    (ngSubmit)="_createNewTag()" 
+                    class="form">
+                    <mat-form-field appearance="outline" class="field value">
+                        <mat-label>
+                            Tag Name
+                        </mat-label>
+                        <input 
+                            type="text" 
+                            matInput 
+                            [formControlName]="'tagValue'"
+                        >
+                        <mat-error>Field must contain a value</mat-error>
+                    </mat-form-field>
+
+                    <button 
+                        type="submit" 
+                        class="submit"
+                        mat-stroked-button 
+                        [disabled]="!newTagForm.valid"
+                    > 
+                        Submit
+                    </button>
+                </form>
+            </div>
+
+            <div class="edit-tag-form" *ngIf="isEditingTag">
+                <form 
+                    [formGroup]="editTagForm" 
+                    (ngSubmit)="_submitEditTag()" 
+                    class="form">
+                    <mat-form-field appearance="outline" class="field value">
+                        <mat-label>
+                            Tag Name
+                        </mat-label>
+                        <input 
+                            type="text" 
+                            matInput 
+                            [formControlName]="'tagValue'"
+                        >
+                        <mat-error>Field must contain a value</mat-error>
+                    </mat-form-field>
+
+                    
+                    <div class="form-button">
+                        <button 
+                            class="cancel-edit"
+                            mat-stroked-button
+                            (click)="_resetForm()"
+                            color="warn"
+                        > 
+                            Annuler
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="submit"
+                            mat-stroked-button 
+                            [disabled]="!editTagForm.valid"
+                        > 
+                            Edit
+                        </button>
+                    </div>
+                </form>
+            </div>
+              
+        </mat-card-content>
+
+        <mat-card-footer>
+            <div class="button-container" *ngIf="!isAddingNewTag && !isEditingTag">
+                <button 
+                    type="button" 
+                    mat-stroked-button 
+                    (click)="isAddingNewTag = !isAddingNewTag"> 
+                    Ajouter 
+                </button>
+                <button 
+                    [disabled]="!selectedTag" 
+                    type="button" 
+                    mat-stroked-button 
+                    (click)="_editTag()"> 
+                    Editer 
+                </button>
+                <button 
+                    [disabled]="!selectedTag" 
+                    type="button" 
+                    color="warn" 
+                    mat-stroked-button 
+                    (click)="_deleteTag()"> 
+                    Supprimer 
+                </button>
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</div>

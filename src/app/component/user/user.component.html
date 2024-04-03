@@ -1,0 +1,100 @@
+<div class="container">
+    <mat-card class="card"> 
+        <mat-card-header class="header">
+            <mat-card-title>My users</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="content">
+            <div class="users" *ngIf="!isAddingUser && !isEditingUser">
+                <div *ngFor="let user of users" >
+                    <mat-form-field class="user-field">
+                        <input matInput type="text" disabled [value]="user.emailAddress">
+                        <button matSuffix mat-icon-button (click)="editUser(user)">
+                            <mat-icon matSuffix>mode_edit</mat-icon>
+                        </button>
+                        <button matSuffix mat-icon-button (click)="deleteUser(user)">
+                            <mat-icon matSuffix color="warn">delete</mat-icon>
+                        </button>
+                     </mat-form-field>
+                    
+                </div>
+            </div>
+            <div *ngIf="isAddingUser || isEditingUser">
+                <form [formGroup]="newUserForm" (ngSubmit)="_onSubmit()" class="form">
+                    <div class="name">
+                        <mat-form-field appearance="outline" class="name-field">
+                            <mat-label>First Name</mat-label>
+                            <input 
+                                type="text"
+                                matInput 
+                                placeholder="First Name"
+                                [formControlName]="'firstName'"
+                                >
+                            <mat-error 
+                                [id]="'firstName'"
+                            >
+                            {{_getFirstNameErrorMessage()}}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="name-field">
+                            <mat-label>Last Name</mat-label>
+                            <input 
+                                type="text"
+                                matInput 
+                                placeholder="Last Name"
+                                [formControlName]="'lastName'"
+                                >
+                            <mat-error [id]="'lastName'">{{_getLastNameErrorMessage()}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field appearance="outline" class="email-field">
+                        <mat-label>Email</mat-label>
+                        <input 
+                            type="email"
+                            matInput 
+                            placeholder="Email"
+                            [formControlName]="'email'"
+                            >
+                        <mat-error 
+                            [id]="'email'"
+                        >
+                        {{_getEmailErrorMessage()}}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="password-field">
+                        <mat-label>Password</mat-label>
+                        <input 
+                            type="password"
+                            matInput 
+                            placeholder="Password"
+                            [formControlName]="'password'"
+                            >
+                        <mat-error 
+                            [id]="'password'"
+                        >
+                        {{_getPasswordErrorMessage()}}
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div class="form-button">
+                        <div class="form-button-fake"></div>
+                        <button type="button" mat-stroked-button color="warn" (click)="_resetForm()">Annuler</button>
+                        <button type="submit" mat-stroked-button [disabled]="!newUserForm.valid">Submit</button>
+                    </div>
+                </form>
+
+                
+            </div>   
+            <div class="add-user-btn" *ngIf="!isAddingUser && !isEditingUser">
+                <div></div>
+            
+                <button mat-stroked-button (click)="isAddingUser = !isAddingUser">
+                    Ajouter
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    
+</div>
